@@ -9,6 +9,10 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { IdeaContext, type IdeaContextType } from "./context/IdeaContext";
+import { useEffect, useState } from "react";
+import type { Idea } from "./types";
+import { generateNIdeas } from "./utils";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -42,7 +46,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const [ideas, setIdeas] = useState<IdeaContextType | null>(null);
+
+  const loadIdeas = async () => {
+    const p = new Promise<Idea[]>((value) => {
+      value(generateNIdeas(12000));
+    });
+    p.then((loadedValue) => setIdeas({ ideas: loadedValue }));
+  };
+
+  useEffect(() => {
+    loadIdeas();
+  }, []);
+
+  return (
+    <IdeaContext.Provider value={ideas}>
+      <Outlet />
+    </IdeaContext.Provider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
