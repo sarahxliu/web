@@ -9,11 +9,12 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { IdeaContext, type IdeaContextType } from "./context/IdeaContext";
+import { IdeaContext } from "./context/IdeaContext";
 import { useEffect, useState } from "react";
-import type { Idea } from "./types";
+import type { Idea, IdeaFilterFunction } from "./types";
 import { generateNIdeas } from "./utils";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -46,21 +47,40 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const [ideas, setIdeas] = useState<IdeaContextType | null>(null);
+  const [ideas, setIdeas] = useState<Idea[] | null>(null);
+  const [filteredIdeas, setFilteredIdeas] = useState<Idea[] | null>(null);
+  const [ideaFilterFunction, setIdeaFilterFunction] =
+    useState<IdeaFilterFunction | null>(null);
+
+  const setFilter = (newFilter: IdeaFilterFunction) => {
+    setIdeaFilterFunction(() => newFilter);
+  };
 
   const loadIdeas = async () => {
     const p = new Promise<Idea[]>((value) => {
       value(generateNIdeas(12000));
     });
-    p.then((loadedValue) => setIdeas({ ideas: loadedValue }));
+    p.then((loadedValue) => setIdeas(loadedValue));
   };
 
   useEffect(() => {
     loadIdeas();
   }, []);
 
+  useEffect(() => {
+    if (ideas) {
+      if (ideaFilterFunction) {
+        setFilteredIdeas(ideas.filter(ideaFilterFunction));
+      } else {
+        setFilteredIdeas(ideas);
+      }
+    }
+  }, [ideas, ideaFilterFunction]);
+
   return (
-    <IdeaContext.Provider value={ideas}>
+    <IdeaContext.Provider
+      value={{ ideas: filteredIdeas, setIdeaFilter: setFilter }}
+    >
       <Outlet />
     </IdeaContext.Provider>
   );

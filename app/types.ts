@@ -45,3 +45,5 @@ export interface Idea {
   subCategory: TestType[];
   status: Option<BAStatus>;
 }
+
+export type IdeaFilterFunction = (idea: Idea) => boolean;
