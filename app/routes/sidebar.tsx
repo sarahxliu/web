@@ -27,9 +27,24 @@ const SideBar = () => {
           <Search
             handleSearchTermChange={(newTerm) => {
               const newFilterFunction = (idea: Idea) => {
-                return idea.solution
+                const tagContains = idea.impactArea.reduce<boolean>(
+                  (prev: boolean, cur) => {
+                    return (
+                      prev ||
+                      cur
+                        .toLocaleLowerCase()
+                        .includes(newTerm.toLocaleLowerCase())
+                    );
+                  },
+                  false
+                );
+                const boroughContains = idea.borough
+                  .toLocaleLowerCase()
+                  .includes(newTerm.toLocaleLowerCase());
+                const titleContains = idea.solution
                   .toLowerCase()
                   .includes(newTerm.toLocaleLowerCase());
+                return titleContains || tagContains || boroughContains;
               };
               ideaContext.setIdeaFilter(newFilterFunction);
             }}

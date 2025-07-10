@@ -10,7 +10,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { IdeaContext } from "./context/IdeaContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Idea, IdeaFilterFunction } from "./types";
 import { generateNIdeas } from "./utils";
 
@@ -52,6 +52,8 @@ export default function App() {
   const [ideaFilterFunction, setIdeaFilterFunction] =
     useState<IdeaFilterFunction | null>(null);
 
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
+
   const setFilter = (newFilter: IdeaFilterFunction) => {
     setIdeaFilterFunction(() => newFilter);
   };
@@ -67,15 +69,59 @@ export default function App() {
     loadIdeas();
   }, []);
 
+  const filterIdeas = useCallback(
+    (ideas: Idea[], filterFunction: IdeaFilterFunction) => {
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+        timeoutIdRef.current = null;
+      }
+      setFilteredIdeas(() => []);
+      const FILTER_SIZE = 100;
+      const filterIdeasAux = (
+        ideas: Idea[],
+        index: number,
+        filterGroupSize: number,
+        filterFunction: IdeaFilterFunction
+      ) => {
+        const currentSlice = ideas.slice(
+          Math.max(0, index),
+          Math.min(ideas.length, index + filterGroupSize)
+        );
+        const filteredSlice = currentSlice.filter(filterFunction);
+
+        setFilteredIdeas((lastFiltered) => {
+          if (lastFiltered === null) return filteredSlice;
+          else return [...lastFiltered, ...filteredSlice];
+        });
+
+        if (index + filterGroupSize < ideas.length) {
+          timeoutIdRef.current = setTimeout(() => {
+            filterIdeasAux(
+              ideas,
+              index + filterGroupSize,
+              filterGroupSize,
+              filterFunction
+            );
+          }, 100);
+        } else {
+          timeoutIdRef.current = null;
+        }
+      };
+
+      filterIdeasAux(ideas, 0, FILTER_SIZE, filterFunction);
+    },
+    []
+  );
+
   useEffect(() => {
     if (ideas) {
       if (ideaFilterFunction) {
-        setFilteredIdeas(ideas.filter(ideaFilterFunction));
+        filterIdeas(ideas, ideaFilterFunction);
       } else {
         setFilteredIdeas(ideas);
       }
     }
-  }, [ideas, ideaFilterFunction]);
+  }, [ideas, ideaFilterFunction, filterIdeas]);
 
   return (
     <IdeaContext.Provider
