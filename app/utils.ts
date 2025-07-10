@@ -12,17 +12,30 @@ const getRandomElement = <T>(arr: T[]): T => {
   return arr[Math.floor(Math.random() * arr.length)];
 };
 
+const getRandomArrayElements = <T>(arr: T[], min: number, max: number): T[] => {
+  const numElements = Math.floor(Math.random() * (max - min + 1)) + min;
+  const elements: T[] = [];
+  for (let i = 0; i < numElements; i++) {
+    elements.push(getRandomElement(arr));
+  }
+  return elements;
+};
+
 export const generateRandomIdea = (): Idea => {
   const randomBorough: Borough = getRandomElement(BOROUGHS);
   const randomIdeaType: TestType = getRandomElement(TESTTYPES);
-  const randomImpactArea: TestImpact = getRandomElement(TESTIMPACTS);
-  const randomSubCategory: TestType = getRandomElement(TESTTYPES);
+  const randomImpactArea: TestImpact[] = getRandomArrayElements(
+    TESTIMPACTS,
+    1,
+    5
+  );
+  const randomSubCategory: TestType[] = getRandomArrayElements(TESTTYPES, 1, 5);
 
   const statusOptions: Option<BAStatus>[] = [
     "None",
     {
-      BAImpactArea: [getRandomElement(TESTIMPACTS)],
-      BASubcategory: [getRandomElement(TESTTYPES)],
+      BAImpactArea: getRandomArrayElements(TESTIMPACTS, 1, 5),
+      BASubcategory: getRandomArrayElements(TESTTYPES, 1, 5),
       Final20Ideas: Math.random() > 0.5,
       FinalBallot: Math.random() > 0.5,
       FinalDescription: Math.random() > 0.5,

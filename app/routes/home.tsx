@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import type { Route } from "./+types/home";
 
+// eslint-disable-next-line react-refresh/only-export-components, no-empty-pattern
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "IoNYC - Ideas of New York City" },

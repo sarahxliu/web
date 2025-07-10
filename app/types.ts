@@ -6,6 +6,7 @@ export type Borough =
   | "bronx"
   | "staten island"
   | "queens";
+
 export const BOROUGHS: Borough[] = [
   "brooklyn",
   "bronx",
@@ -23,8 +24,8 @@ export const TESTIMPACTS: TestImpact[] = ["Health", "Education", "Community"];
 export type Option<T> = "None" | T;
 
 export interface BAStatus {
-  BAImpactArea: string[];
-  BASubcategory: string[];
+  BAImpactArea: TestImpact[];
+  BASubcategory: TestType[];
   Final20Ideas: boolean;
   FinalBallot: boolean;
   FinalDescription: boolean;
@@ -40,7 +41,9 @@ export interface Idea {
   challenge: string;
   solution: string;
   ideaType: TestType;
-  impactArea: TestImpact;
-  subCategory: TestType;
+  impactArea: TestImpact[];
+  subCategory: TestType[];
   status: Option<BAStatus>;
 }
+
+export type IdeaFilterFunction = (idea: Idea) => boolean;
