@@ -11,8 +11,12 @@ const SideBar = () => {
   const MemoizedIdeas = useMemo(() => {
     return ideaContext.ideas ? (
       <>
-        {ideaContext.ideas.map((idea) => (
-          <SidebarIdea idea={idea} handleOpen={() => {}}></SidebarIdea>
+        {ideaContext.ideas.map((idea, idx) => (
+          <SidebarIdea
+            idea={idea}
+            handleOpen={() => {}}
+            key={idx}
+          ></SidebarIdea>
         ))}
       </>
     ) : (
@@ -41,6 +45,7 @@ const SideBar = () => {
                 const boroughContains = idea.borough
                   .toLocaleLowerCase()
                   .includes(newTerm.toLocaleLowerCase());
+
                 const titleContains = idea.solution
                   .toLowerCase()
                   .includes(newTerm.toLocaleLowerCase());

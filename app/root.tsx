@@ -123,6 +123,8 @@ export default function App() {
     }
   }, [ideas, ideaFilterFunction, filterIdeas]);
 
+  useEffect(() => console.log(filteredIdeas?.length), [filteredIdeas]);
+
   return (
     <IdeaContext.Provider
       value={{ ideas: filteredIdeas, setIdeaFilter: setFilter }}
