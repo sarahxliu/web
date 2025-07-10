@@ -1,19 +1,19 @@
 import type { FC } from "react";
 import type { Idea } from "~/types";
 
-export interface SidebarIdeaProps {
+export interface IdeaPanelProps {
   idea: Idea;
-  handleOpen: (idea: Idea) => void;
+  handleClose: (idea: Idea) => void;
 }
 
-export const SidebarIdea: FC<SidebarIdeaProps> = ({ idea, handleOpen }) => {
+export const IdeaPanel: FC<IdeaPanelProps> = ({ idea, handleClose }) => {
   return (
     <div className="w-full p-2 border border-neutral-200 bg-white flex flex-col gap-2 relative group">
       <button
         className="absolute top-2 right-2 p-1 border border-neutral-200 cursor-pointer hover:bg-neutral-50 bg-white text-neutral-400 hover:text-neutral-700 group-hover:visible invisible"
-        onClick={() => handleOpen(idea)}
+        onClick={() => handleClose(idea)}
       >
-        Open Idea
+        Close
       </button>
       <h1 className="text-lg font-bold">{idea.solution}</h1>
 
@@ -79,12 +79,12 @@ export const SidebarIdea: FC<SidebarIdeaProps> = ({ idea, handleOpen }) => {
           </div>
         </div>
       </div>
-      {/* <div className="flex flex-col gap-1 w-full">
+      <div className="flex flex-col gap-1 w-full">
         <label className="text-sm text-neutral-600 text-nowrap">
           Challenge
         </label>
         <p>{idea.challenge}</p>
-      </div> */}
+      </div>
     </div>
   );
 };

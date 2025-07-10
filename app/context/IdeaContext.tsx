@@ -5,7 +5,7 @@ export interface IdeaContextType {
   ideas: Idea[] | null;
   setIdeaFilter: (newFilter: IdeaFilterFunction) => void;
   targetBorough: Borough | null;
-  setTargetBorough: (newBorough: Borough) => void;
+  setTargetBorough: (newBorough: Borough | "All") => void;
 }
 
 export const IdeaContext = createContext<IdeaContextType>({

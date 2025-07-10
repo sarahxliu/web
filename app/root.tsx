@@ -92,22 +92,22 @@ export default function App() {
   }, []);
 
   const filterIdeas = useCallback(
-    (ideas: Idea[], filterFunction: IdeaFilterFunction) => {
+    (localIdeas: Idea[], filterFunction: IdeaFilterFunction) => {
       if (timeoutIdRef.current) {
         clearTimeout(timeoutIdRef.current);
         timeoutIdRef.current = null;
       }
       setFilteredIdeas(() => []);
-      const FILTER_SIZE = 100;
+      const FILTER_SIZE = 10;
       const filterIdeasAux = (
-        ideas: Idea[],
+        innerIdeas: Idea[],
         index: number,
         filterGroupSize: number,
         filterFunction: IdeaFilterFunction
       ) => {
-        const currentSlice = ideas.slice(
+        const currentSlice = innerIdeas.slice(
           Math.max(0, index),
-          Math.min(ideas.length, index + filterGroupSize)
+          Math.min(innerIdeas.length, index + filterGroupSize)
         );
         const filteredSlice = currentSlice.filter(filterFunction);
 
@@ -116,21 +116,21 @@ export default function App() {
           else return [...lastFiltered, ...filteredSlice];
         });
 
-        if (index + filterGroupSize < ideas.length) {
+        if (index + filterGroupSize < innerIdeas.length) {
           timeoutIdRef.current = setTimeout(() => {
             filterIdeasAux(
-              ideas,
+              innerIdeas,
               index + filterGroupSize,
               filterGroupSize,
               filterFunction
             );
-          }, 100);
+          }, 1000);
         } else {
           timeoutIdRef.current = null;
         }
       };
 
-      filterIdeasAux(ideas, 0, FILTER_SIZE, filterFunction);
+      filterIdeasAux(localIdeas, 0, FILTER_SIZE, filterFunction);
     },
     []
   );
@@ -183,7 +183,9 @@ export default function App() {
     statenIslandIdeas,
   ]);
 
-  useEffect(() => console.log(filteredIdeas?.length), [filteredIdeas]);
+  useEffect(() => {
+    console.log(targetBorough);
+  }, [targetBorough]);
 
   return (
     <IdeaContext.Provider
@@ -191,7 +193,9 @@ export default function App() {
         ideas: filteredIdeas,
         setIdeaFilter: setFilter,
         targetBorough: targetBorough,
-        setTargetBorough: setTargetBorough,
+        setTargetBorough: (newBorough: Borough | "All") => {
+          setTargetBorough(newBorough === "All" ? null : newBorough);
+        },
       }}
     >
       <Outlet />
