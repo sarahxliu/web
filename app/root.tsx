@@ -12,7 +12,7 @@ import "./app.css";
 import { IdeaContext } from "./context/IdeaContext";
 import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { type Borough, type Idea, type IdeaFilterFunction } from "./types";
-import { generateNIdeas } from "./utils";
+import { loadIdeas } from "./utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const links: Route.LinksFunction = () => [
@@ -80,15 +80,8 @@ export default function App() {
     setIdeaFilterFunction(() => newFilter);
   };
 
-  const loadIdeas = async () => {
-    const p = new Promise<Idea[]>((value) => {
-      value(generateNIdeas(12000));
-    });
-    p.then((loadedValue) => setIdeas(loadedValue));
-  };
-
   useEffect(() => {
-    loadIdeas();
+    loadIdeas().then((ideas) => setIdeas(ideas));
   }, []);
 
   const filterIdeas = useCallback(

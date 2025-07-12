@@ -7,6 +7,8 @@ export interface SidebarIdeaProps {
 }
 
 export const SidebarIdea: FC<SidebarIdeaProps> = ({ idea, handleOpen }) => {
+  const MAX_TRUNCATE_THRESHOLD = 2;
+
   return (
     <div className="w-full p-2 border border-neutral-200 bg-white flex flex-col gap-2 relative group">
       <button
@@ -35,16 +37,18 @@ export const SidebarIdea: FC<SidebarIdeaProps> = ({ idea, handleOpen }) => {
 
           <div className="flex gap-2">
             <>
-              {idea.impactArea.slice(0, 2).map((someImpactArea, idx) => (
-                <span
-                  className="border border-neutral-200 p-1 text-nowrap h-min"
-                  key={idx}
-                >
-                  {someImpactArea}
-                </span>
-              ))}
+              {idea.impactArea
+                .slice(0, MAX_TRUNCATE_THRESHOLD)
+                .map((someImpactArea, idx) => (
+                  <span
+                    className="border border-neutral-200 p-1 text-nowrap h-min"
+                    key={idx}
+                  >
+                    {someImpactArea}
+                  </span>
+                ))}
             </>
-            {idea.impactArea.length - 2 > 0 ? (
+            {idea.impactArea.length - MAX_TRUNCATE_THRESHOLD > 0 ? (
               <span className="border border-neutral-200 p-1 text-nowrap h-min">
                 {`+${idea.impactArea.length - 2} More...`}
               </span>
@@ -60,18 +64,20 @@ export const SidebarIdea: FC<SidebarIdeaProps> = ({ idea, handleOpen }) => {
 
           <div className="flex gap-2">
             <>
-              {idea.impactArea.slice(0, 2).map((someImpactArea, idx) => (
-                <span
-                  className="border border-neutral-200 p-1 text-nowrap h-min"
-                  key={idx}
-                >
-                  {someImpactArea}
-                </span>
-              ))}
+              {idea.audience
+                .slice(0, MAX_TRUNCATE_THRESHOLD)
+                .map((someImpactArea, idx) => (
+                  <span
+                    className="border border-neutral-200 p-1 text-nowrap h-min"
+                    key={idx}
+                  >
+                    {someImpactArea}
+                  </span>
+                ))}
             </>
-            {idea.impactArea.length - 2 > 0 ? (
+            {idea.audience.length - MAX_TRUNCATE_THRESHOLD > 0 ? (
               <span className="border border-neutral-200 p-1 text-nowrap h-min">
-                {`+${idea.impactArea.length - 2} More...`}
+                {`+${idea.audience.length - 2} More...`}
               </span>
             ) : (
               <></>
