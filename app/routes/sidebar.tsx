@@ -26,7 +26,7 @@ const SideBar = () => {
 
   const MemoizedIdeas = useMemo(() => {
     return ideaContext.ideas && currentPage !== null ? (
-      <div className="flex flex-col gap-2 w-min">
+      <div className="flex flex-col gap-2 max-w-2xl">
         <>
           {ideaContext.ideas
             .slice(
@@ -89,8 +89,8 @@ const SideBar = () => {
             <></>
           )}
           <div
-            className={`flex flex-col gap-2 p-2 w-full h-full ${
-              selectedIdea ? "max-h-0 max-w-0" : ""
+            className={`flex-col gap-2 p-2 h-full w-full ${
+              selectedIdea ? "hidden" : "flex"
             }`}
           >
             <div className="flex gap-2 w-full">

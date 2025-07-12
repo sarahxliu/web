@@ -6,7 +6,7 @@ import type {
   Option,
   BAStatus,
 } from "./types";
-import { BOROUGHS, TESTTYPES, TESTIMPACTS } from "./types";
+import { BOROUGHS, TESTTYPES, TESTIMPACTS, isIdea } from "./types";
 
 const getRandomElement = <T>(arr: T[]): T => {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -38,14 +38,14 @@ export const generateRandomIdea = (): Idea => {
       BASubcategory: getRandomArrayElements(TESTTYPES, 1, 5),
       Final20Ideas: Math.random() > 0.5,
       FinalBallot: Math.random() > 0.5,
-      FinalDescription: Math.random() > 0.5,
-      FinalTitle: Math.random() > 0.5,
+      FinalDescription: `Original Title for ${randomIdeaType} Idea`,
+      FinalTitle: `Original Title for ${randomIdeaType} Idea`,
     },
   ];
   const randomStatus: Option<BAStatus> = getRandomElement(statusOptions);
 
   return {
-    audience: `Audience for ${randomBorough} idea`,
+    audience: ["everyone", "someone"],
     borough: randomBorough,
     flags: ["flag1", "flag2"],
     IGSession: `Session ${Math.floor(Math.random() * 10) + 1}`,
@@ -64,5 +64,26 @@ export const generateNIdeas = (n: number): Idea[] => {
   for (let i = 0; i < n; i++) {
     ideas.push(generateRandomIdea());
   }
+  return ideas;
+};
+
+export const loadIdeas = async (): Promise<Idea[]> => {
+  const res = await fetch("/2024Ideas.json");
+  const data = await res.json();
+
+  if (!Array.isArray(data)) {
+    throw new Error("Invalid data: expected an array");
+  }
+
+  const ideas: Idea[] = [];
+
+  for (const item of data) {
+    if (isIdea(item)) {
+      ideas.push(item);
+    } else {
+      console.warn("Invalid idea object skipped:", item);
+    }
+  }
+
   return ideas;
 };

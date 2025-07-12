@@ -8,7 +8,7 @@ export interface IdeaPanelProps {
 
 export const IdeaPanel: FC<IdeaPanelProps> = ({ idea, handleClose }) => {
   return (
-    <div className="w-full p-2 border border-neutral-200 bg-white flex flex-col gap-2 relative group">
+    <div className="w-full max-w-3xl w-2xl p-2 border border-neutral-200 bg-white flex flex-col gap-2 relative group">
       <button
         className="absolute top-2 right-2 p-1 border border-neutral-200 cursor-pointer hover:bg-neutral-50 bg-white text-neutral-400 hover:text-neutral-700 group-hover:visible invisible"
         onClick={() => handleClose(idea)}
@@ -33,49 +33,31 @@ export const IdeaPanel: FC<IdeaPanelProps> = ({ idea, handleClose }) => {
             Impact Area:
           </label>
 
-          <div className="flex gap-2">
-            <>
-              {idea.impactArea.slice(0, 2).map((someImpactArea, idx) => (
-                <span
-                  className="border border-neutral-200 p-1 text-nowrap h-min"
-                  key={idx}
-                >
-                  {someImpactArea}
-                </span>
-              ))}
-            </>
-            {idea.impactArea.length - 2 > 0 ? (
-              <span className="border border-neutral-200 p-1 text-nowrap h-min">
-                {`+${idea.impactArea.length - 2} More...`}
+          <div className="flex flex-wrap gap-2 max-w-96">
+            {idea.impactArea.map((someImpactArea, idx) => (
+              <span
+                className="border border-neutral-200 p-1 text-nowrap h-min"
+                key={idx}
+              >
+                {someImpactArea}
               </span>
-            ) : (
-              <></>
-            )}
+            ))}
           </div>
         </div>
         <div className="flex flex-col gap-1 w-full">
           <label className="text-sm text-neutral-600 text-nowrap">
-            Audience
+            Audience:
           </label>
 
-          <div className="flex gap-2">
-            <>
-              {idea.impactArea.slice(0, 2).map((someImpactArea, idx) => (
-                <span
-                  className="border border-neutral-200 p-1 text-nowrap h-min"
-                  key={idx}
-                >
-                  {someImpactArea}
-                </span>
-              ))}
-            </>
-            {idea.impactArea.length - 2 > 0 ? (
-              <span className="border border-neutral-200 p-1 text-nowrap h-min">
-                {`+${idea.impactArea.length - 2} More...`}
+          <div className="flex flex-wrap gap-2 max-w-96">
+            {idea.audience.map((someAudience, idx) => (
+              <span
+                className="border border-neutral-200 p-1 text-nowrap h-min"
+                key={idx}
+              >
+                {someAudience}
               </span>
-            ) : (
-              <></>
-            )}
+            ))}
           </div>
         </div>
       </div>
