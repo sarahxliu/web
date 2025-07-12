@@ -8,7 +8,7 @@ export interface IdeaPanelProps {
 
 export const IdeaPanel: FC<IdeaPanelProps> = ({ idea, handleClose }) => {
   return (
-    <div className="w-full max-w-3xl w-2xl p-2 border border-neutral-200 bg-white flex flex-col gap-2 relative group">
+    <div className="w-full max-w-3xl p-2 border border-neutral-200 bg-white flex flex-col gap-2 relative group">
       <button
         className="absolute top-2 right-2 p-1 border border-neutral-200 cursor-pointer hover:bg-neutral-50 bg-white text-neutral-400 hover:text-neutral-700 group-hover:visible invisible"
         onClick={() => handleClose(idea)}
