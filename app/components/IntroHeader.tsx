@@ -27,13 +27,9 @@ export default function IntroHeader() {
       </div>
 
       {/* Main image — visually anchored to bottom of paper */}
-<div className="z-30 -mt-52 mb-14 w-full flex justify-center relative">
-<img
-  src="/MainImage.png"
-  alt="Main visual"
-/>
-</div>
-
+      <div className="z-30 -mt-52 mb-14 w-full flex justify-center relative">
+        <img src="/MainImage.png" alt="Main visual" />
+      </div>
 
       {/* Button */}
       <div className="flex justify-center gap-4 flex-wrap z-30">
